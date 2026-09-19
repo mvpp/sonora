@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name={{name}}
-GenericName=Dictée vocale
+GenericName=Voice Dictation
 Comment={{comment}}
 Exec={{exec}}
 Icon={{icon}}

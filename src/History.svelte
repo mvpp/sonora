@@ -52,32 +52,32 @@
     }
     // Demo data for the screenshot harness / browser preview (no backend).
     history = [
-      { id: "h1", text: "Peux-tu préparer un résumé de la réunion de ce matin ?", createdAt: Date.now() - 1000 * 60 * 7 },
-      { id: "h2", text: "Ajouter une section FAQ à la documentation du projet.", createdAt: Date.now() - 1000 * 60 * 60 * 3 },
-      { id: "h3", text: "Réserve une salle pour la rétro de vendredi après-midi.", createdAt: Date.now() - 1000 * 60 * 60 * 27 },
+      { id: "h1", text: "Can you put together a summary of this morning's meeting?", createdAt: Date.now() - 1000 * 60 * 7 },
+      { id: "h2", text: "Add an FAQ section to the project documentation.", createdAt: Date.now() - 1000 * 60 * 60 * 3 },
+      { id: "h3", text: "Book a room for Friday afternoon's retro.", createdAt: Date.now() - 1000 * 60 * 60 * 27 },
     ];
   });
 </script>
 
 <div class="hist-root">
   {#if history.length === 0}
-    <p class="placeholder">Aucune dictée enregistrée pour l'instant.<br />Vos dictées apparaîtront ici.</p>
+    <p class="placeholder">No dictations saved yet.<br />Your dictations will appear here.</p>
   {:else}
     <div class="hist-head">
-      <span>{history.length} entrée{history.length > 1 ? "s" : ""}</span>
-      <button class="link" onclick={clearHistory}>Tout effacer</button>
+      <span>{history.length} {history.length > 1 ? "entries" : "entry"}</span>
+      <button class="link" onclick={clearHistory}>Clear all</button>
     </div>
     <ul class="hist-list">
       {#each history as entry (entry.id)}
         <li class="hist-item">
-          <button class="entry-text" title="Copier" onclick={() => copyEntry(entry)}>
+          <button class="entry-text" title="Copy" onclick={() => copyEntry(entry)}>
             <span class="entry-time">
               {fmtTime(entry.createdAt)}
-              {#if copied === entry.id}<span class="entry-copied">copié ✓</span>{/if}
+              {#if copied === entry.id}<span class="entry-copied">copied ✓</span>{/if}
             </span>
             <span class="entry-body">{entry.text}</span>
           </button>
-          <button class="entry-del" title="Supprimer" onclick={() => deleteEntry(entry.id)}>✕</button>
+          <button class="entry-del" title="Delete" onclick={() => deleteEntry(entry.id)}>✕</button>
         </li>
       {/each}
     </ul>

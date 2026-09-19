@@ -12,7 +12,7 @@ use serde_json::{json, Value};
 
 use crate::{secrets, settings};
 
-const CLEANUP_SYSTEM: &str = "Tu nettoies des transcriptions vocales. Supprime les marqueurs d'hésitation et mots de remplissage (euh, heu, hum, hmm, ben, bah, mmh, ainsi que les répétitions involontaires et les faux départs) SANS changer le sens, le vocabulaire ni la langue. Tu peux corriger la ponctuation et les majuscules. Réponds UNIQUEMENT avec le texte nettoyé, sans guillemets ni commentaire.";
+const CLEANUP_SYSTEM: &str = "You clean up voice transcripts. Remove hesitation markers and filler words (um, uh, er, hmm, and their equivalents in any language, as well as unintended repetitions and false starts) WITHOUT changing the meaning, the wording or the language. You may fix punctuation and capitalization. Reply ONLY with the cleaned text, without quotes or commentary.";
 
 /// Built-in hesitation cleanup.
 pub async fn run(config_dir: &Path, text: &str) -> Result<String, String> {
@@ -23,10 +23,10 @@ pub async fn run(config_dir: &Path, text: &str) -> Result<String, String> {
 pub async fn transform(config_dir: &Path, instruction: &str, text: &str) -> Result<String, String> {
     let instruction = instruction.trim();
     if instruction.is_empty() {
-        return Err("Prompt vide.".into());
+        return Err("Empty prompt.".into());
     }
     let system = format!(
-        "{instruction}\n\nTu reçois ci-dessous un texte issu d'une dictée vocale. Applique strictement l'instruction ci-dessus à ce texte. Réponds UNIQUEMENT avec le résultat, sans préambule, sans guillemets, ni commentaire."
+        "{instruction}\n\nBelow is text from a voice dictation. Apply the instruction above strictly to this text. Reply ONLY with the result, without preamble, quotes or commentary."
     );
     complete(config_dir, &system, text).await
 }
@@ -47,16 +47,16 @@ async fn complete(config_dir: &Path, system: &str, text: &str) -> Result<String,
             let model = nonempty(s.cleanup_model).unwrap_or_else(|| "gemini-2.5-flash".into());
             let key = secrets::get_api_key(config_dir, "gemini")
                 .or_else(|| first_env(&["GEMINI_API_KEY", "GOOGLE_API_KEY", "TRANSCRIPT_API_KEY"]))
-                .ok_or("Clé Gemini absente (⚙ → moteur de reformulation).")?;
+                .ok_or("Gemini key missing (⚙ → cleanup engine).")?;
             gemini_generate(&client, &model, &key, system, text).await?
         }
         "openai-compatible" | "openai" | "groq" | "mistral" => {
             let base = nonempty(s.cleanup_base_url)
                 .or_else(|| default_base(&provider))
-                .ok_or("Définis l'URL de base du moteur de reformulation (⚙).")?;
+                .ok_or("Set the cleanup engine base URL (⚙).")?;
             let model = nonempty(s.cleanup_model)
                 .or_else(|| default_model(&provider))
-                .ok_or("Définis le modèle du moteur de reformulation (⚙).")?;
+                .ok_or("Set the cleanup engine model (⚙).")?;
             let key = secrets::get_api_key(config_dir, "cleanup")
                 .or_else(|| {
                     first_env(&["CLEANUP_API_KEY", "MISTRAL_API_KEY", "TRANSCRIPT_API_KEY"])
@@ -64,7 +64,7 @@ async fn complete(config_dir: &Path, system: &str, text: &str) -> Result<String,
                 .unwrap_or_default();
             openai_chat(&client, &base, &model, &key, system, text).await?
         }
-        other => return Err(format!("Moteur de reformulation inconnu: '{other}'")),
+        other => return Err(format!("Unknown cleanup engine: '{other}'")),
     };
 
     Ok(out.trim().to_string())
@@ -91,7 +91,7 @@ async fn gemini_generate(
         .json(&body)
         .send()
         .await
-        .map_err(|e| format!("Requête Gemini: {e}"))?;
+        .map_err(|e| format!("Gemini request: {e}"))?;
     let status = resp.status();
     let v: Value = resp.json().await.map_err(|e| e.to_string())?;
     if !status.is_success() {
@@ -112,7 +112,7 @@ async fn gemini_generate(
         })
         .unwrap_or_default();
     if out.is_empty() {
-        return Err("Réponse Gemini vide".into());
+        return Err("Empty Gemini response".into());
     }
     Ok(out)
 }
@@ -142,7 +142,7 @@ async fn openai_chat(
     let resp = req
         .send()
         .await
-        .map_err(|e| format!("Requête nettoyage: {e}"))?;
+        .map_err(|e| format!("Cleanup request: {e}"))?;
     let status = resp.status();
     let v: Value = resp.json().await.map_err(|e| e.to_string())?;
     if !status.is_success() {
@@ -159,7 +159,7 @@ async fn openai_chat(
         .unwrap_or_default()
         .to_string();
     if out.is_empty() {
-        return Err("Réponse vide".into());
+        return Err("Empty response".into());
     }
     Ok(out)
 }

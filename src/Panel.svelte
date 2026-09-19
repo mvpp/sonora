@@ -28,8 +28,8 @@
   // Keep the OS window title in sync with the active tab so it never collides
   // with the bar's "Sonora" title (Hyprland/wm rules target the exact bar title).
   const TITLES: Record<Tab, string> = {
-    history: "Sonora — Historique",
-    settings: "Sonora — Réglages",
+    history: "Sonora — History",
+    settings: "Sonora — Settings",
   };
   $effect(() => {
     if (!isTauri) return;
@@ -86,7 +86,7 @@
         aria-selected={tab === "history"}
         onclick={() => (tab = "history")}
       >
-        Historique
+        History
       </button>
       <button
         class="tab"
@@ -95,10 +95,10 @@
         aria-selected={tab === "settings"}
         onclick={() => (tab = "settings")}
       >
-        Réglages
+        Settings
       </button>
     </div>
-    <button class="p-close" onclick={closeWindow} title="Fermer" aria-label="Fermer">✕</button>
+    <button class="p-close" onclick={closeWindow} title="Close" aria-label="Close">✕</button>
   </header>
 
   <div class="p-body">

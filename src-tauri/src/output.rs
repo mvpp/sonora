@@ -29,9 +29,9 @@ pub fn type_text(text: &str) -> Result<(), String> {
 
     match result {
         Ok(s) if s.success() => Ok(()),
-        Ok(s) => Err(format!("outil de saisie a échoué (code {:?})", s.code())),
+        Ok(s) => Err(format!("typing tool failed (code {:?})", s.code())),
         Err(e) => Err(format!(
-            "outil de saisie introuvable ({}): installe wtype (Wayland) ou xdotool (X11)",
+            "typing tool not found ({}): install wtype (Wayland) or xdotool (X11)",
             e
         )),
     }

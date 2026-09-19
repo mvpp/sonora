@@ -197,11 +197,7 @@ fn capture_loop(
 ) {
     let host = cpal::default_host();
     let Some(device) = pick_input_device(&host, device_name.as_deref()) else {
-        fail(
-            &app,
-            &running,
-            "Aucun micro détecté (périphérique d'entrée).",
-        );
+        fail(&app, &running, "No microphone detected (input device).");
         return;
     };
     let picked = device
@@ -212,7 +208,11 @@ fn capture_loop(
     let supported = match device.default_input_config() {
         Ok(c) => c,
         Err(e) => {
-            fail(&app, &running, format!("Config micro indisponible: {e}"));
+            fail(
+                &app,
+                &running,
+                format!("Microphone config unavailable: {e}"),
+            );
             return;
         }
     };
@@ -229,12 +229,12 @@ fn capture_loop(
     let stream = match build_stream(&device, &config, sample_format, channels, tx) {
         Ok(s) => s,
         Err(e) => {
-            fail(&app, &running, format!("Ouverture du flux audio: {e}"));
+            fail(&app, &running, format!("Opening audio stream: {e}"));
             return;
         }
     };
     if let Err(e) = stream.play() {
-        fail(&app, &running, format!("Démarrage du flux audio: {e}"));
+        fail(&app, &running, format!("Starting audio stream: {e}"));
         return;
     }
 
@@ -282,7 +282,7 @@ fn build_stream(
                 None,
             )
         }
-        other => return Err(format!("format d'échantillon non supporté: {other:?}")),
+        other => return Err(format!("unsupported sample format: {other:?}")),
     };
     res.map_err(|e| e.to_string())
 }

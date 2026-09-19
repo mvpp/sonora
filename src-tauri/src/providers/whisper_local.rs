@@ -21,7 +21,7 @@ pub async fn run_session(app: AppHandle, cfg: ProviderConfig, mut rx: UnboundedR
         Ok(c) => Arc::new(c),
         Err(e) => {
             BackendEvent::Error {
-                message: format!("Chargement du modèle whisper '{}' échoué: {e}", cfg.model),
+                message: format!("Loading whisper model '{}' failed: {e}", cfg.model),
             }
             .emit(&app);
             BackendEvent::State { state: "idle" }.emit(&app);
@@ -57,7 +57,7 @@ pub async fn run_session(app: AppHandle, cfg: ProviderConfig, mut rx: UnboundedR
                         BackendEvent::Error { message: e }.emit(&app);
                     }
                     Err(e) => BackendEvent::Error {
-                        message: format!("Tâche whisper: {e}"),
+                        message: format!("Whisper task: {e}"),
                     }
                     .emit(&app),
                 }

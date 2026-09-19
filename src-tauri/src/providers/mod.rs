@@ -61,7 +61,7 @@ impl ProviderConfig {
 
         let stored_key = secrets::get_api_key(config_dir, &kind);
         let key_or = |env_keys: &[&str]| stored_key.clone().or_else(|| first_env(env_keys));
-        let no_key = "Aucune clé API. Configure-la dans les réglages (⚙).";
+        let no_key = "No API key. Set it in the settings (⚙).";
 
         let cfg = match kind.as_str() {
             "gemini" => Self {
@@ -97,21 +97,20 @@ impl ProviderConfig {
                 kind,
             },
             "openai-compatible" => Self {
-                base_url: Some(base_override.ok_or("Définis l'URL de base dans les réglages.")?),
-                model: model_override.ok_or("Définis le modèle dans les réglages.")?,
+                base_url: Some(base_override.ok_or("Set the base URL in the settings.")?),
+                model: model_override.ok_or("Set the model in the settings.")?,
                 api_key: key_or(&["TRANSCRIPT_API_KEY"]).unwrap_or_default(),
                 language,
                 kind,
             },
             "whisper-local" => Self {
-                model: whisper_model
-                    .ok_or("Définis le chemin du modèle whisper dans les réglages.")?,
+                model: whisper_model.ok_or("Set the whisper model path in the settings.")?,
                 api_key: String::new(),
                 base_url: None,
                 language,
                 kind,
             },
-            other => return Err(format!("Fournisseur inconnu: '{other}'")),
+            other => return Err(format!("Unknown provider: '{other}'")),
         };
         Ok(cfg)
     }
@@ -173,7 +172,7 @@ impl SessionController {
             "whisper-local" => {
                 tauri::async_runtime::spawn(whisper_local::run_session(app, cfg, rx));
             }
-            other => return Err(format!("Fournisseur inconnu: '{other}'")),
+            other => return Err(format!("Unknown provider: '{other}'")),
         }
 
         *self.inner.lock().unwrap() = Some(sink.clone());

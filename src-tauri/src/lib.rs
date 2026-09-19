@@ -193,7 +193,7 @@ fn open_settings(app: AppHandle, tab: Option<String>) -> Result<(), String> {
     // First open: seed the active tab via the URL (the listener isn't ready yet).
     let url = format!("index.html?tab={tab}");
     WebviewWindowBuilder::new(&app, "settings", WebviewUrl::App(url.into()))
-        .title("Sonora — Panneau")
+        .title("Sonora — Panel")
         .inner_size(480.0, 680.0)
         .min_inner_size(380.0, 460.0)
         .resizable(true)
@@ -337,15 +337,9 @@ fn register_global_shortcut(app: &AppHandle) {
 fn register_global_shortcut(_app: &AppHandle) {}
 
 fn setup_tray(app: &AppHandle) -> tauri::Result<()> {
-    let toggle_i = MenuItem::with_id(
-        app,
-        "toggle",
-        "Démarrer / arrêter la dictée",
-        true,
-        None::<&str>,
-    )?;
-    let show_i = MenuItem::with_id(app, "show", "Afficher", true, None::<&str>)?;
-    let quit_i = MenuItem::with_id(app, "quit", "Quitter", true, None::<&str>)?;
+    let toggle_i = MenuItem::with_id(app, "toggle", "Start / stop dictation", true, None::<&str>)?;
+    let show_i = MenuItem::with_id(app, "show", "Show", true, None::<&str>)?;
+    let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
     let menu = Menu::with_items(app, &[&toggle_i, &show_i, &quit_i])?;
 
     let icon = tauri::image::Image::from_bytes(include_bytes!("../icons/tray.png"))?;

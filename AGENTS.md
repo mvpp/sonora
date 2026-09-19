@@ -92,8 +92,9 @@ documented in the README(s) **and** the site, in both languages.
 
 ## Conventions
 
-- **Languages:** agent replies follow the user; the app's **UI strings stay
-  French**; user-facing **docs, website and release notes are English-default +
+- **Languages:** agent replies follow the user; on this `english-ui` fork
+  branch the app's **UI strings are English** (upstream keeps them French — do
+  not revert when rebasing); user-facing **docs, website and release notes are English-default +
   French**, kept in sync (see the section above).
 - Commit messages: conventional, concise.
 - Don't auto-close issues from commit messages until the reporter confirms — use

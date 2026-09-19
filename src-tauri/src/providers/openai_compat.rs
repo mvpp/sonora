@@ -90,16 +90,16 @@ async fn transcribe(
     let resp = req
         .send()
         .await
-        .map_err(|e| format!("Requête transcription échouée: {e}"))?;
+        .map_err(|e| format!("Transcription request failed: {e}"))?;
     let status = resp.status();
     let body = resp.text().await.map_err(|e| e.to_string())?;
     if !status.is_success() {
         let snippet: String = body.chars().take(200).collect();
-        return Err(format!("HTTP {} sur {url}: {snippet}", status.as_u16()));
+        return Err(format!("HTTP {} on {url}: {snippet}", status.as_u16()));
     }
 
     let v: serde_json::Value =
-        serde_json::from_str(&body).map_err(|e| format!("Réponse JSON invalide: {e}"))?;
+        serde_json::from_str(&body).map_err(|e| format!("Invalid JSON response: {e}"))?;
     Ok(v.get("text")
         .and_then(|t| t.as_str())
         .unwrap_or_default()

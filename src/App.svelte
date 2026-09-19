@@ -35,7 +35,7 @@
   let errorMsg = $state("");
 
   // Kept in memory only to append a finished dictation; the list now lives in
-  // the dedicated panel window (Historique tab). Re-synced via the broadcast.
+  // the dedicated panel window (History tab). Re-synced via the broadcast.
   let history = $state<HistoryEntry[]>([]);
   let copied = $state(false);
   let copiedTimer: ReturnType<typeof setTimeout> | undefined;
@@ -45,7 +45,7 @@
   /** true once a usable transcription config resolves (drives onboarding). */
   let configured = $state(true);
   let cleaning = $state(false);
-  let procLabel = $state("Reformulation…");
+  let procLabel = $state("Rewriting…");
   let promptMenuOpen = $state(false);
   const prompts = $derived(settings.prompts ?? []);
 
@@ -174,14 +174,14 @@
     if (mode === "bar") {
       recState = "listening";
       level = 0.5;
-      finals = ["Bonjour, ceci est une démonstration de Sonora,"];
-      partial = "le texte s'écrit en temps réel.";
+      finals = ["Hello, this is a Sonora demo,"];
+      partial = "the text appears in real time.";
       return;
     }
     if (mode === "result") {
       recState = "idle";
       autoType = true;
-      finals = ["Réécris l'intro, version plus concise."];
+      finals = ["Rewrite the intro, more concisely."];
       partial = "";
       return;
     }
@@ -341,7 +341,7 @@
    *  to persist (the cleaned version, or the original on failure). */
   async function runCleanup(text: string): Promise<string> {
     cleaning = true;
-    procLabel = "Nettoyage…";
+    procLabel = "Cleaning up…";
     try {
       const cleaned = (await invoke<string>("cleanup_text", { text }))?.trim();
       if (cleaned) {
@@ -351,7 +351,7 @@
         return cleaned;
       }
     } catch (e) {
-      errorMsg = "Nettoyage : " + String(e);
+      errorMsg = "Cleanup: " + String(e);
     } finally {
       cleaning = false;
     }
@@ -367,7 +367,7 @@
   /** Apply a user-defined reformulation prompt to the current transcript. */
   async function runTransform(promptText: string, text: string): Promise<string> {
     cleaning = true;
-    procLabel = "Reformulation…";
+    procLabel = "Rewriting…";
     try {
       const out = (
         await invoke<string>("transform_text", { text, prompt: promptText })
@@ -379,7 +379,7 @@
         return out;
       }
     } catch (e) {
-      errorMsg = "Reformulation : " + String(e);
+      errorMsg = "Rewrite: " + String(e);
     } finally {
       cleaning = false;
     }
@@ -450,13 +450,13 @@
     configured = await invoke<boolean>("is_configured");
   }
 
-  /** Open the dedicated panel window on the Historique tab. */
+  /** Open the dedicated panel window on the History tab. */
   function openHistory() {
     promptMenuOpen = false;
     void invoke("open_settings", { tab: "history" });
   }
 
-  /** Open the dedicated panel window on the Réglages tab. */
+  /** Open the dedicated panel window on the Settings tab. */
   function openSettings() {
     promptMenuOpen = false;
     void invoke("open_settings", { tab: "settings" });
@@ -541,9 +541,9 @@
       class="bar"
       role="toolbar"
       tabindex="-1"
-      aria-label="Barre Sonora — glissez pour déplacer"
+      aria-label="Sonora bar — drag to move"
       onpointerdown={onBarPointerDown}
-      title="Glissez pour déplacer · ⌘/Alt + glisser depuis n'importe où"
+      title="Drag to move · ⌘/Alt + drag from anywhere"
     >
       <span class="grip" aria-hidden="true">
         <svg width="10" height="18" viewBox="0 0 10 18" fill="currentColor">
@@ -556,9 +556,9 @@
       <button
         class="rec"
         class:on={listening}
-        title={listening ? "Arrêter" : "Dicter"}
+        title={listening ? "Stop" : "Dictate"}
         onclick={toggle}
-        aria-label={listening ? "Arrêter" : "Démarrer la dictée"}
+        aria-label={listening ? "Stop" : "Start dictation"}
       >
         {#if listening}
           <span class="stop"></span>
@@ -581,9 +581,9 @@
             {#each finals as f}<span class="final">{f} </span>{/each}<span class="partial">{partial}</span>
           </p>
         {:else if !configured}
-          <span class="ph">Ajoutez une clé API pour démarrer</span>
+          <span class="ph">Add an API key to get started</span>
         {:else}
-          <span class="ph">{listening ? "À l'écoute…" : "Dictez ou cliquez le micro"}</span>
+          <span class="ph">{listening ? "Listening…" : "Speak or click the mic"}</span>
         {/if}
       </div>
 
@@ -595,20 +595,20 @@
           class:active={promptMenuOpen}
           onclick={() => (promptMenuOpen = !promptMenuOpen)}
           disabled={cleaning}
-          title="Reformuler / nettoyer">✦</button
+          title="Rewrite / clean up">✦</button
         >
-        <button class="icon-btn" class:ok={copied} onclick={copyCurrent} title="Copier">
+        <button class="icon-btn" class:ok={copied} onclick={copyCurrent} title="Copy">
           {#if copied}✓{:else}⧉{/if}
         </button>
-        <button class="icon-btn" onclick={clearAll} title="Effacer">⌫</button>
+        <button class="icon-btn" onclick={clearAll} title="Clear">⌫</button>
       {/if}
 
-      <button class="icon-btn" onclick={openHistory} title="Historique" aria-label="Historique">
+      <button class="icon-btn" onclick={openHistory} title="History" aria-label="History">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 12a9 9 0 1 0 3-6.7L3 8" /><path d="M3 4v4h4" /><path d="M12 8v4l3 2" />
         </svg>
       </button>
-      <button class="icon-btn menu" onclick={openSettings} title="Réglages" aria-label="Réglages">
+      <button class="icon-btn menu" onclick={openSettings} title="Settings" aria-label="Settings">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3" />
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
@@ -628,13 +628,13 @@
       <div class="prompt-menu">
         <button class="pm-item" onclick={cleanupNow} disabled={cleaning}>
           <span class="pm-ico">✦</span>
-          <span>Nettoyer les hésitations</span>
+          <span>Clean up hesitations</span>
         </button>
         {#each prompts as p (p.id)}
           {#if (p.name ?? "").trim() || (p.prompt ?? "").trim()}
             <button class="pm-item" onclick={() => applyPrompt(p)} disabled={cleaning}>
               <span class="pm-ico">↻</span>
-              <span>{(p.name ?? "").trim() || "Sans nom"}</span>
+              <span>{(p.name ?? "").trim() || "Untitled"}</span>
             </button>
           {/if}
         {/each}
@@ -643,7 +643,7 @@
           onclick={() => {
             promptMenuOpen = false;
             openSettings();
-          }}>+ Gérer les prompts</button
+          }}>+ Manage prompts</button
         >
       </div>
     {/if}

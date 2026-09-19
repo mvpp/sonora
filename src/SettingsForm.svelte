@@ -40,15 +40,15 @@
   // entry when the saved device is currently unavailable (e.g. unplugged USB).
   const micOptions = $derived.by(() => {
     const opts = [
-      { id: "", label: "Système (par défaut)" },
+      { id: "", label: "System (default)" },
       ...audioInputs.map((d) => ({
         id: d.id,
-        label: d.is_default ? `${d.name} — défaut` : d.name,
+        label: d.is_default ? `${d.name} — default` : d.name,
       })),
     ];
     const sel = settings.input_device;
     if (sel && !audioInputs.some((d) => d.id === sel)) {
-      opts.push({ id: sel, label: "Micro sélectionné (indisponible)" });
+      opts.push({ id: sel, label: "Selected mic (unavailable)" });
     }
     return opts;
   });
@@ -97,7 +97,7 @@
       cleanupKey = "";
       await refreshHasCleanupKey();
     }
-    settingsMsg = "Enregistré ✓";
+    settingsMsg = "Saved ✓";
     setTimeout(() => (settingsMsg = ""), 1500);
     broadcast();
   }
@@ -147,19 +147,19 @@
       hasCleanupKey = true;
       autoType = true;
       audioInputs = [
-        { id: "coreaudio:builtin", name: "Micro intégré (MacBook Pro)", is_default: true },
-        { id: "coreaudio:jabra", name: "Casque USB — Jabra Evolve", is_default: false },
+        { id: "coreaudio:builtin", name: "Built-in mic (MacBook Pro)", is_default: true },
+        { id: "coreaudio:jabra", name: "USB headset — Jabra Evolve", is_default: false },
         { id: "coreaudio:c920", name: "Webcam C920", is_default: false },
       ];
       settings = {
         provider: "gemini",
-        language: "fr",
+        language: "en",
         input_device: "coreaudio:jabra",
         cleanup_enabled: true,
         cleanup_provider: "gemini",
         prompts: [
-          { id: "p1", name: "Reformuler — pro", prompt: "Réécris ce texte dans un ton professionnel et concis." },
-          { id: "p2", name: "Commande terminal", prompt: "Convertis cette demande en une commande shell." },
+          { id: "p1", name: "Rewrite — pro", prompt: "Rewrite this text in a professional, concise tone." },
+          { id: "p2", name: "Terminal command", prompt: "Convert this request into a shell command." },
         ],
       };
     }
@@ -172,40 +172,40 @@
     <div class="quick">
       <button class="quick-card" class:on={autoType} onclick={toggleAutoType}>
         <span class="q-ico">⌨</span>
-        <span class="q-name">Coller au curseur</span>
-        <span class="q-state">{autoType ? "activé" : "désactivé"}</span>
+        <span class="q-name">Type at cursor</span>
+        <span class="q-state">{autoType ? "on" : "off"}</span>
       </button>
       <button class="quick-card" class:on={settings.cleanup_enabled === true} onclick={toggleCleanup}>
         <span class="q-ico">✦</span>
-        <span class="q-name">Nettoyage auto</span>
-        <span class="q-state">{settings.cleanup_enabled ? "activé" : "désactivé"}</span>
+        <span class="q-name">Auto cleanup</span>
+        <span class="q-state">{settings.cleanup_enabled ? "on" : "off"}</span>
       </button>
     </div>
 
-    <!-- Thème -->
+    <!-- Theme -->
     <div class="field">
-      <span>Thème</span>
+      <span>Theme</span>
       <div class="seg">
-        <button class="seg-btn" class:active={theme === "system"} onclick={() => chooseTheme("system")}>Système</button>
-        <button class="seg-btn" class:active={theme === "light"} onclick={() => chooseTheme("light")}>Clair</button>
-        <button class="seg-btn" class:active={theme === "dark"} onclick={() => chooseTheme("dark")}>Sombre</button>
+        <button class="seg-btn" class:active={theme === "system"} onclick={() => chooseTheme("system")}>System</button>
+        <button class="seg-btn" class:active={theme === "light"} onclick={() => chooseTheme("light")}>Light</button>
+        <button class="seg-btn" class:active={theme === "dark"} onclick={() => chooseTheme("dark")}>Dark</button>
       </div>
     </div>
 
-    <!-- Microphone (source de capture) -->
+    <!-- Microphone (capture source) -->
     <div class="field">
       <span>Microphone</span>
       <div class="mic-row">
         <div class="mic-select">
           <Select bind:value={settings.input_device} options={micOptions} />
         </div>
-        <button class="mic-refresh" title="Rafraîchir la liste" aria-label="Rafraîchir les micros" onclick={loadAudioInputs}>↻</button>
+        <button class="mic-refresh" title="Refresh the list" aria-label="Refresh microphones" onclick={loadAudioInputs}>↻</button>
       </div>
-      <span class="mic-hint">Choisissez la source audio utilisée pour la dictée. « Système » suit le micro par défaut de l'OS.</span>
+      <span class="mic-hint">Choose the audio source used for dictation. “System” follows the OS default mic.</span>
     </div>
 
     <div class="field">
-      <span>Fournisseur</span>
+      <span>Provider</span>
       <Select
         bind:value={settings.provider}
         options={PROVIDERS}
@@ -218,111 +218,111 @@
 
     {#if needsKey}
       <label class="field">
-        <span>Clé API {hasKey ? "· enregistrée ✓" : ""}</span>
+        <span>API key {hasKey ? "· saved ✓" : ""}</span>
         <input
           type="password"
           bind:value={apiKey}
-          placeholder={hasKey ? "•••• (laisser vide pour garder)" : "Coller la clé"}
+          placeholder={hasKey ? "•••• (leave empty to keep)" : "Paste key"}
         />
       </label>
       {#if provider === "gemini" && apiKey.startsWith("AQ.")}
         <p class="warn">
-          ⚠ Ceci ressemble à un jeton temporaire (Live) qui expire vite. Utilise une clé
-          API AI Studio (commence par « AIza ») : aistudio.google.com/apikey
+          ⚠ This looks like a temporary (Live) token that expires quickly. Use an AI Studio
+          API key (starts with “AIza”): aistudio.google.com/apikey
         </p>
       {/if}
       {#if hasKey}
-        <button class="link" onclick={clearKey}>Supprimer la clé enregistrée</button>
+        <button class="link" onclick={clearKey}>Delete the saved key</button>
       {/if}
     {/if}
 
     <label class="field">
-      <span>Modèle (optionnel)</span>
-      <input type="text" bind:value={settings.model} placeholder={MODEL_PLACEHOLDER[provider] || "défaut"} />
+      <span>Model (optional)</span>
+      <input type="text" bind:value={settings.model} placeholder={MODEL_PLACEHOLDER[provider] || "default"} />
     </label>
 
     {#if provider === "openai-compatible"}
       <label class="field">
-        <span>URL de base</span>
+        <span>Base URL</span>
         <input type="text" bind:value={settings.base_url} placeholder="http://localhost:8000/v1" />
       </label>
     {/if}
 
     {#if provider === "whisper-local"}
       <label class="field">
-        <span>Chemin du modèle ggml</span>
-        <input type="text" bind:value={settings.whisper_model} placeholder="/chemin/ggml-base.bin" />
+        <span>ggml model path</span>
+        <input type="text" bind:value={settings.whisper_model} placeholder="/path/to/ggml-base.bin" />
       </label>
     {/if}
 
     <label class="field">
-      <span>Langue (optionnel)</span>
-      <input type="text" bind:value={settings.language} placeholder="fr · vide = auto" />
+      <span>Language (optional)</span>
+      <input type="text" bind:value={settings.language} placeholder="en · empty = auto" />
     </label>
 
-    <div class="section-sep">Nettoyage des hésitations</div>
+    <div class="section-sep">Hesitation cleanup</div>
 
     <label class="field check">
       <input type="checkbox" bind:checked={settings.cleanup_enabled} />
-      <span>Nettoyer automatiquement (retirer « euh », faux départs…)</span>
+      <span>Clean up automatically (remove “um”, false starts…)</span>
     </label>
 
     {#if settings.cleanup_enabled}
       <div class="field">
-        <span>Moteur de nettoyage</span>
+        <span>Cleanup engine</span>
         <Select bind:value={settings.cleanup_provider} options={CLEANUP_ENGINES} />
       </div>
       <label class="field">
-        <span>Modèle de nettoyage</span>
+        <span>Cleanup model</span>
         <input
           type="text"
           bind:value={settings.cleanup_model}
-          placeholder={CLEANUP_MODEL_PLACEHOLDER[cleanupProvider] ?? "défaut"}
+          placeholder={CLEANUP_MODEL_PLACEHOLDER[cleanupProvider] ?? "default"}
         />
       </label>
       {#if cleanupProvider === "gemini"}
-        <p class="hint">Utilise la clé Gemini configurée plus haut.</p>
+        <p class="hint">Uses the Gemini key configured above.</p>
       {:else}
         {#if cleanupProvider === "openai-compatible"}
           <label class="field">
-            <span>URL de base</span>
+            <span>Base URL</span>
             <input type="text" bind:value={settings.cleanup_base_url} placeholder="http://localhost:8000/v1" />
           </label>
         {/if}
         <label class="field">
-          <span>Clé API nettoyage {hasCleanupKey ? "· enregistrée ✓" : ""}</span>
+          <span>Cleanup API key {hasCleanupKey ? "· saved ✓" : ""}</span>
           <input
             type="password"
             bind:value={cleanupKey}
-            placeholder={hasCleanupKey ? "•••• (laisser vide pour garder)" : "Coller la clé"}
+            placeholder={hasCleanupKey ? "•••• (leave empty to keep)" : "Paste key"}
           />
         </label>
       {/if}
     {/if}
 
-    <div class="section-sep">Prompts de reformulation</div>
-    <p class="hint">Appliquez-les à une dictée via le bouton ✦. Ils utilisent le moteur configuré ci-dessus.</p>
+    <div class="section-sep">Rewrite prompts</div>
+    <p class="hint">Apply them to a dictation with the ✦ button. They use the engine configured above.</p>
     {#each settings.prompts ?? [] as p (p.id)}
       <div class="prompt-row">
         <div class="prompt-head">
-          <input class="prompt-name" type="text" bind:value={p.name} placeholder="Nom (ex. Formel, Commande terminal…)" />
-          <button class="prompt-del" title="Supprimer" onclick={() => removePrompt(p.id)}>✕</button>
+          <input class="prompt-name" type="text" bind:value={p.name} placeholder="Name (e.g. Formal, Terminal command…)" />
+          <button class="prompt-del" title="Delete" onclick={() => removePrompt(p.id)}>✕</button>
         </div>
         <textarea
           class="prompt-text"
           rows="2"
           bind:value={p.prompt}
-          placeholder="Instruction, ex. « Réécris ce texte de manière formelle et professionnelle. »"
+          placeholder="Instruction, e.g. “Rewrite this text in a formal, professional way.”"
         ></textarea>
       </div>
     {/each}
-    <button class="add-prompt" onclick={addPrompt}>+ Ajouter un prompt</button>
+    <button class="add-prompt" onclick={addPrompt}>+ Add a prompt</button>
   </div>
 
   <footer class="s-actions">
     {#if settingsMsg}<span class="ok-msg">{settingsMsg}</span>{/if}
-    <button class="cancel-btn" onclick={() => onClose?.()}>Fermer</button>
-    <button class="save-btn" onclick={saveSettings}>Enregistrer</button>
+    <button class="cancel-btn" onclick={() => onClose?.()}>Close</button>
+    <button class="save-btn" onclick={saveSettings}>Save</button>
   </footer>
 </div>
 

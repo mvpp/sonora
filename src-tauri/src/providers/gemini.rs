@@ -40,7 +40,7 @@ pub async fn run_session(app: AppHandle, cfg: ProviderConfig, mut rx: UnboundedR
         Ok(x) => x,
         Err(e) => {
             BackendEvent::Error {
-                message: format!("Connexion Gemini Live échouée: {e}"),
+                message: format!("Gemini Live connection failed: {e}"),
             }
             .emit(&app);
             return;
@@ -63,7 +63,7 @@ pub async fn run_session(app: AppHandle, cfg: ProviderConfig, mut rx: UnboundedR
     });
     if let Err(e) = write.send(text_msg(setup.to_string())).await {
         BackendEvent::Error {
-            message: format!("Envoi du setup Gemini: {e}"),
+            message: format!("Sending Gemini setup: {e}"),
         }
         .emit(&app);
         return;
@@ -124,13 +124,13 @@ pub async fn run_session(app: AppHandle, cfg: ProviderConfig, mut rx: UnboundedR
                 Some(Ok(Message::Close(frame))) => {
                     let reason = frame
                         .map(|f| format!("code {} — {}", u16::from(f.code), f.reason))
-                        .unwrap_or_else(|| "sans raison".into());
+                        .unwrap_or_else(|| "no reason".into());
                     eprintln!("[gemini] fermeture serveur: {reason} (ready={ready})");
                     // Closed before setupComplete -> the producer refused the
                     // session (bad model/key/fields); surface it in the HUD.
                     if !ready {
                         BackendEvent::Error {
-                            message: format!("Gemini a refusé la session: {reason}"),
+                            message: format!("Gemini rejected the session: {reason}"),
                         }
                         .emit(&app);
                     }
@@ -139,7 +139,7 @@ pub async fn run_session(app: AppHandle, cfg: ProviderConfig, mut rx: UnboundedR
                 None => break 'main,
                 Some(Ok(_)) => {} // ping / pong / frame
                 Some(Err(e)) => {
-                    BackendEvent::Error { message: format!("Flux Gemini interrompu: {e}") }.emit(&app);
+                    BackendEvent::Error { message: format!("Gemini stream interrupted: {e}") }.emit(&app);
                     break 'main;
                 }
             },

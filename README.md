@@ -69,6 +69,27 @@ cursor**. Plug in the engine of your choice: **Gemini**, **Mistral**, **OpenAI**
 > "Per segment" transcription splits speech with voice-activity detection (VAD) and
 > transcribes each segment; Gemini Live instead streams the text continuously.
 
+## English UI fork (`english-ui` branch)
+
+This branch = upstream release tag + one commit translating every UI string, tray
+menu item and error message from French to English (terminal logs stay French).
+Upstream has no i18n, so the English UI needs its own build.
+
+```bash
+bash scripts/build-deb-docker.sh     # builds in Docker; needs only docker on the host
+sudo apt install ./src-tauri/target/release/bundle/deb/Sonora_*_amd64.deb
+```
+
+Upgrade to a new upstream release `vX.Y.Z`:
+
+```bash
+git fetch origin --tags
+git rebase --onto vX.Y.Z <old-tag> english-ui   # e.g. --onto v0.2.13 v0.2.12
+# resolve conflicts, translate any new French strings, then rebuild as above
+```
+
+Settings (`~/.config/fr.thomas.sonora/`) are untouched by reinstalling.
+
 ## Install / development
 
 Prerequisites: **Rust** (stable), **Bun**, and the

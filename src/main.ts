@@ -6,7 +6,7 @@ import Panel from "./Panel.svelte";
 import { isTauri } from "./lib/tauri";
 
 // The same bundle drives the floating bar and the dedicated panel window
-// (Historique / Réglages tabs). Pick the component from the Tauri window label
+// (History / Settings tabs). Pick the component from the Tauri window label
 // (or `?view=settings`, used by the screenshot harness which runs outside Tauri).
 function isPanelView(): boolean {
   if (new URLSearchParams(location.search).get("view") === "settings") return true;

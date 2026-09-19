@@ -10,15 +10,15 @@ export const PROVIDERS: ProviderOption[] = [
   { id: "gemini", label: "Gemini Live (streaming)" },
   { id: "mistral", label: "Mistral (Voxtral)" },
   { id: "openai", label: "OpenAI Whisper" },
-  { id: "groq", label: "Groq Whisper (rapide)" },
+  { id: "groq", label: "Groq Whisper (fast)" },
   { id: "openai-compatible", label: "OpenAI-compatible" },
-  { id: "whisper-local", label: "Whisper local (offline)" },
+  { id: "whisper-local", label: "Local Whisper (offline)" },
 ];
 
 export const CLEANUP_ENGINES: ProviderOption[] = [
   { id: "gemini", label: "Gemini" },
   { id: "mistral", label: "Mistral" },
-  { id: "groq", label: "Groq (rapide)" },
+  { id: "groq", label: "Groq (fast)" },
   { id: "openai", label: "OpenAI" },
   { id: "openai-compatible", label: "OpenAI-compatible (local…)" },
 ];
@@ -28,7 +28,7 @@ export const CLEANUP_MODEL_PLACEHOLDER: Record<string, string> = {
   mistral: "mistral-small-latest",
   groq: "llama-3.3-70b-versatile",
   openai: "gpt-4o-mini",
-  "openai-compatible": "nom du modèle",
+  "openai-compatible": "model name",
 };
 
 export const MODEL_PLACEHOLDER: Record<string, string> = {
