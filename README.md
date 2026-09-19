@@ -77,7 +77,7 @@ Upstream has no i18n, so the English UI needs its own build.
 
 ```bash
 bash scripts/build-deb-docker.sh     # builds in Docker; needs only docker on the host
-sudo apt install ./src-tauri/target/release/bundle/deb/Sonora_*_amd64.deb
+sudo apt install --reinstall ./src-tauri/target/release/bundle/deb/Sonora_*_amd64.deb
 ```
 
 Upgrade to a new upstream release `vX.Y.Z`:
