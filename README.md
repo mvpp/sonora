@@ -71,9 +71,16 @@ cursor**. Plug in the engine of your choice: **Gemini**, **Mistral**, **OpenAI**
 
 ## English UI fork (`english-ui` branch)
 
-This branch = upstream release tag + one commit translating every UI string, tray
-menu item and error message from French to English (terminal logs stay French).
-Upstream has no i18n, so the English UI needs its own build.
+This branch = upstream release tag + local changes:
+
+- **English UI** — every UI string, tray menu item and error message translated
+  from French (terminal logs stay French). Upstream has no i18n, so this needs
+  its own build.
+- **Reliable type-at-cursor on X11** — the text is pasted (clipboard + `Ctrl+V`,
+  `Ctrl+Shift+V` when the focused window is a terminal) instead of synthesised
+  with `xdotool type`, which rebinds a scratch keycode for every character
+  outside the keyboard layout and drops or corrupts CJK and typographic
+  punctuation. Wayland still types via `wtype`, which handles Unicode correctly.
 
 ```bash
 bash scripts/build-deb-docker.sh     # builds in Docker; needs only docker on the host

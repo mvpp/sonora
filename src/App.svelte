@@ -246,12 +246,16 @@
             const t = ev.text.trim();
             finals = [...finals, t];
             partial = "";
-            void autoCopy();
-            // When cleanup is on we type the cleaned text once at the end.
+            // When cleanup is on we send the cleaned text once at the end.
             if (autoType && !cleanupEnabled) {
+              // The X11 backend delivers by pasting, so the clipboard is its
+              // transport: writing the full transcript here would race the
+              // pending paste. finalizeSession restores it once we're idle.
               void invoke("type_text", { text: t + " " }).catch(
                 (e) => (errorMsg = String(e)),
               );
+            } else {
+              void autoCopy();
             }
           }
           break;
@@ -404,6 +408,9 @@
         );
       }
     }
+    // Delivery may have used the clipboard as its transport (X11 paste); now
+    // that the session is over, leave the full transcript on it.
+    if (autoType) await copyText(text);
     history = [newEntry(text), ...history];
     await saveHistory(history);
     void invoke("broadcast_history_changed"); // refresh the panel's History tab
