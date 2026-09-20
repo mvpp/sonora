@@ -87,12 +87,14 @@ bash scripts/build-deb-docker.sh     # builds in Docker; needs only docker on th
 sudo apt install --reinstall ./src-tauri/target/release/bundle/deb/Sonora_*_amd64.deb
 ```
 
-Upgrade to a new upstream release `vX.Y.Z`:
+Upgrade to a new upstream release `vX.Y.Z` (`upstream` = `Devitek/sonora`,
+`origin` = this fork):
 
 ```bash
-git fetch origin --tags
+git fetch upstream --tags
 git rebase --onto vX.Y.Z <old-tag> english-ui   # e.g. --onto v0.2.13 v0.2.12
 # resolve conflicts, translate any new French strings, then rebuild as above
+git push --force-with-lease origin english-ui
 ```
 
 Settings (`~/.config/fr.thomas.sonora/`) are untouched by reinstalling.
