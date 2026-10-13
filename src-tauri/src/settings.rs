@@ -26,7 +26,7 @@ pub struct Settings {
 
     // Post-processing text engine (cleanup + reformulation prompts).
     pub cleanup_enabled: Option<bool>,
-    pub cleanup_provider: Option<String>, // gemini | openai | groq | openai-compatible
+    pub cleanup_provider: Option<String>, // gemini | minimax | mistral | groq | openai | openai-compatible
     pub cleanup_model: Option<String>,
     pub cleanup_base_url: Option<String>,
 

@@ -46,8 +46,10 @@ directement à l'endroit de votre curseur**. Branchez le moteur de votre choix :
 - ⌘ **Raccourci global** — démarrez/arrêtez sans quitter votre application en cours.
 - 🔌 **Modèles enfichables** — Gemini Live, Mistral (Voxtral), OpenAI Whisper, Groq,
   OpenAI-compatible, Whisper local.
-- ✦ **Nettoyage des hésitations** — passe optionnelle qui retire les « euh », faux départs,
-  répétitions.
+- ✦ **Nettoyage des hésitations** — passe LLM optionnelle (Gemini, MiniMax-M3, Mistral, Groq,
+  OpenAI ou tout endpoint compatible) qui retire les « euh », faux départs, répétitions,
+  corrige les mots mal reconnus d'après le contexte, et recolle les phrases qu'une pause a
+  coupées d'un point parasite.
 - ✍️ **Prompts de reformulation** — transformez une dictée via un LLM avec vos propres prompts
   (« reformuler de manière formelle », « convertir en commande terminal », « réécrire pro »…).
 - 🕘 **Historique** — retrouvez et recopiez vos dictées précédentes.
@@ -108,7 +110,10 @@ Ouvrez les **Réglages** (icône ⚙ de la barre) :
 4. Optionnel : modèle, langue, URL de base (endpoints compatibles), chemin du modèle `ggml`
    (Whisper local).
 5. Optionnel : activez le **nettoyage automatique**, choisissez son **moteur de reformulation**,
-   et définissez vos **prompts** personnalisés.
+   et définissez vos **prompts** personnalisés. Avec **MiniMax (M3)**, collez une clé créée sur
+   [platform.minimax.io](https://platform.minimax.io/user-center/basic-information/interface-key)
+   dans le champ « Clé API nettoyage » (ou définissez `MINIMAX_API_KEY`) ; Sonora appelle
+   `MiniMax-M3` sur `https://api.minimax.io/v1`, réflexion désactivée pour une faible latence.
 
 > Pour le développement, ces réglages peuvent aussi venir d'un fichier `.env` (voir
 > [`.env.example`](.env.example)).

@@ -17,6 +17,7 @@ export const PROVIDERS: ProviderOption[] = [
 
 export const CLEANUP_ENGINES: ProviderOption[] = [
   { id: "gemini", label: "Gemini" },
+  { id: "minimax", label: "MiniMax (M3)" },
   { id: "mistral", label: "Mistral" },
   { id: "groq", label: "Groq (fast)" },
   { id: "openai", label: "OpenAI" },
@@ -25,6 +26,7 @@ export const CLEANUP_ENGINES: ProviderOption[] = [
 
 export const CLEANUP_MODEL_PLACEHOLDER: Record<string, string> = {
   gemini: "gemini-2.5-flash",
+  minimax: "MiniMax-M3",
   mistral: "mistral-small-latest",
   groq: "llama-3.3-70b-versatile",
   openai: "gpt-4o-mini",

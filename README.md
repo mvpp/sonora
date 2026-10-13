@@ -45,7 +45,9 @@ cursor**. Plug in the engine of your choice: **Gemini**, **Mistral**, **OpenAI**
 - ⌘ **Global shortcut** — start/stop without leaving your current app.
 - 🔌 **Pluggable models** — Gemini Live, Mistral (Voxtral), OpenAI Whisper, Groq,
   OpenAI-compatible, local Whisper.
-- ✦ **Hesitation cleanup** — optional pass that strips "uh", false starts, repetitions.
+- ✦ **Hesitation cleanup** — optional LLM pass (Gemini, MiniMax-M3, Mistral, Groq, OpenAI or
+  any compatible endpoint) that strips "uh", false starts, repetitions, fixes misheard words
+  from context, and rejoins sentences that a pause broke with a stray period.
 - ✍️ **Reformulation prompts** — transform a dictation through an LLM with your own
   prompts ("rewrite formally", "convert to a terminal command", "make it professional"…).
 - 🕘 **History** — find and re-copy your previous dictations.
@@ -81,6 +83,14 @@ This branch = upstream release tag + local changes:
   with `xdotool type`, which rebinds a scratch keycode for every character
   outside the keyboard layout and drops or corrupts CJK and typographic
   punctuation. Wayland still types via `wtype`, which handles Unicode correctly.
+- **MiniMax-M3 cleanup engine** — "MiniMax (M3)" in the cleanup engine list
+  (`https://api.minimax.io/v1`, thinking disabled for low latency; key in the
+  cleanup key field or `MINIMAX_API_KEY`). The cleanup prompt is written in
+  Chinese: it reads the whole passage first, fixes misrecognised words from
+  context (homophones, technical terms), rejoins sentences that a pause split
+  with a stray period, and never translates.
+- **Fewer pause splits** — the VAD keeps a segment open through pauses up to
+  700 ms (was 240 ms), and Chinese/Japanese segments are joined without spaces.
 
 ```bash
 bash scripts/build-deb-docker.sh     # builds in Docker; needs only docker on the host
@@ -136,7 +146,10 @@ Open the **Settings** (⚙ icon on the bar):
 4. Optional: model, language, base URL (compatible endpoints), `ggml` model path
    (local Whisper).
 5. Optional: enable **automatic cleanup**, choose its **reformulation engine**, and
-   define your custom **prompts**.
+   define your custom **prompts**. With **MiniMax (M3)**, paste a key from
+   [platform.minimax.io](https://platform.minimax.io/user-center/basic-information/interface-key)
+   in the cleanup key field (or set `MINIMAX_API_KEY`); it calls `MiniMax-M3` on
+   `https://api.minimax.io/v1` with thinking disabled for low latency.
 
 > For development, these settings can also come from a `.env` file (see
 > [`.env.example`](.env.example)).

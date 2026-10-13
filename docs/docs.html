@@ -193,6 +193,7 @@ sudo apt install xdotool</code></pre>
                 <tr><td><strong>Mistral</strong></td><td><a href="https://console.mistral.ai/api-keys" target="_blank" rel="noopener">console.mistral.ai/api-keys</a></td></tr>
                 <tr><td><strong>OpenAI</strong></td><td><a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">platform.openai.com/api-keys</a></td></tr>
                 <tr><td><strong>Groq</strong></td><td><a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a></td></tr>
+                <tr><td><strong>MiniMax</strong> <em>(cleanup)</em></td><td><a href="https://platform.minimax.io/user-center/basic-information/interface-key" target="_blank" rel="noopener">platform.minimax.io</a></td></tr>
               </tbody>
             </table>
           </div>
@@ -236,6 +237,7 @@ sudo apt install xdotool</code></pre>
                 <tr><td>Groq</td><td><code>whisper-large-v3</code></td><td><code>https://api.groq.com/openai/v1</code></td></tr>
                 <tr><td>Cleanup (Gemini)</td><td><code>gemini-2.5-flash</code></td><td>—</td></tr>
                 <tr><td>Cleanup (OpenAI)</td><td><code>gpt-4o-mini</code></td><td><code>https://api.openai.com/v1</code></td></tr>
+                <tr><td>Cleanup (MiniMax)</td><td><code>MiniMax-M3</code></td><td><code>https://api.minimax.io/v1</code></td></tr>
               </tbody>
             </table>
           </div>
@@ -277,7 +279,9 @@ sudo apt install xdotool</code></pre>
           <h2 id="reformulation" class="anchor-h">Cleanup &amp; reformulation</h2>
           <p>
             Enable <strong>automatic cleanup</strong> so an LLM removes hesitations ("uh"), false starts and
-            repetitions after each dictation.
+            repetitions after each dictation. It also fixes misheard words from context (homophones,
+            technical terms) and rejoins sentences that a pause split: chunked engines transcribe each
+            speech segment on its own and close it with a period.
           </p>
           <p>
             Go further with custom <strong>reformulation prompts</strong>: define your own transformations and
@@ -289,7 +293,7 @@ sudo apt install xdotool</code></pre>
             <li>"Fix spelling and grammar only"</li>
             <li>"Summarize in one sentence"</li>
           </ul>
-          <p>Choose the reformulation engine (Gemini, Mistral, Groq, OpenAI or OpenAI-compatible) independently of the transcription engine.</p>
+          <p>Choose the reformulation engine (Gemini, MiniMax, Mistral, Groq, OpenAI or OpenAI-compatible) independently of the transcription engine. <strong>MiniMax</strong> uses <code>MiniMax-M3</code> on the international API (<code>https://api.minimax.io/v1</code>) with thinking disabled, so cleanup stays fast.</p>
 
           <!-- HISTORY -->
           <h2 id="history" class="anchor-h">History</h2>

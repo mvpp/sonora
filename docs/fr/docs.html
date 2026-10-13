@@ -194,6 +194,7 @@ sudo apt install xdotool</code></pre>
                 <tr><td><strong>Mistral</strong></td><td><a href="https://console.mistral.ai/api-keys" target="_blank" rel="noopener">console.mistral.ai/api-keys</a></td></tr>
                 <tr><td><strong>OpenAI</strong></td><td><a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">platform.openai.com/api-keys</a></td></tr>
                 <tr><td><strong>Groq</strong></td><td><a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a></td></tr>
+                <tr><td><strong>MiniMax</strong> <em>(nettoyage)</em></td><td><a href="https://platform.minimax.io/user-center/basic-information/interface-key" target="_blank" rel="noopener">platform.minimax.io</a></td></tr>
               </tbody>
             </table>
           </div>
@@ -235,6 +236,7 @@ sudo apt install xdotool</code></pre>
                 <tr><td>Groq</td><td><code>whisper-large-v3</code></td><td><code>https://api.groq.com/openai/v1</code></td></tr>
                 <tr><td>Nettoyage (Gemini)</td><td><code>gemini-2.5-flash</code></td><td>—</td></tr>
                 <tr><td>Nettoyage (OpenAI)</td><td><code>gpt-4o-mini</code></td><td><code>https://api.openai.com/v1</code></td></tr>
+                <tr><td>Nettoyage (MiniMax)</td><td><code>MiniMax-M3</code></td><td><code>https://api.minimax.io/v1</code></td></tr>
               </tbody>
             </table>
           </div>
@@ -276,7 +278,9 @@ sudo apt install xdotool</code></pre>
           <h2 id="reformulation" class="anchor-h">Nettoyage &amp; reformulation</h2>
           <p>
             Activez le <strong>nettoyage automatique</strong> pour qu'un LLM retire les hésitations
-            (« euh »), faux départs et répétitions après chaque dictée.
+            (« euh »), faux départs et répétitions après chaque dictée. Il corrige aussi les mots mal reconnus
+            d'après le contexte (homophones, termes techniques) et recolle les phrases coupées par une pause :
+            les moteurs par segment transcrivent chaque segment seul et le terminent par un point.
           </p>
           <p>
             Allez plus loin avec des <strong>prompts de reformulation</strong> personnalisés : définissez vos
@@ -288,7 +292,7 @@ sudo apt install xdotool</code></pre>
             <li>« Corriger l'orthographe et la grammaire seulement »</li>
             <li>« Résumer en une phrase »</li>
           </ul>
-          <p>Choisissez le moteur de reformulation (Gemini, Mistral, Groq, OpenAI ou OpenAI-compatible) indépendamment du moteur de transcription.</p>
+          <p>Choisissez le moteur de reformulation (Gemini, MiniMax, Mistral, Groq, OpenAI ou OpenAI-compatible) indépendamment du moteur de transcription. <strong>MiniMax</strong> utilise <code>MiniMax-M3</code> sur l'API internationale (<code>https://api.minimax.io/v1</code>), réflexion désactivée, pour un nettoyage rapide.</p>
 
           <!-- HISTORIQUE -->
           <h2 id="historique" class="anchor-h">Historique</h2>
