@@ -11,6 +11,7 @@ export const PROVIDERS: ProviderOption[] = [
   { id: "mistral", label: "Mistral (Voxtral)" },
   { id: "openai", label: "OpenAI Whisper" },
   { id: "groq", label: "Groq Whisper (fast)" },
+  { id: "minimax", label: "MiniMax ASR" },
   { id: "openai-compatible", label: "OpenAI-compatible" },
   { id: "whisper-local", label: "Local Whisper (offline)" },
 ];
@@ -38,12 +39,13 @@ export const MODEL_PLACEHOLDER: Record<string, string> = {
   mistral: "voxtral-mini-latest",
   openai: "whisper-1",
   groq: "whisper-large-v3",
+  minimax: "asr-1.0",
   "openai-compatible": "whisper-1",
   "whisper-local": "",
 };
 
 /** Providers that need an API key (i.e. not local Whisper / not key-optional). */
-export const KEYED_PROVIDERS = ["gemini", "mistral", "openai", "groq", "openai-compatible"];
+export const KEYED_PROVIDERS = ["gemini", "mistral", "openai", "groq", "minimax", "openai-compatible"];
 
 /** Tauri event emitted (from the backend) when persisted settings change. */
 export const SETTINGS_CHANGED_EVENT = "sonora://settings-changed";

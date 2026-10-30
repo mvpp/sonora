@@ -67,6 +67,7 @@ directement à l'endroit de votre curseur**. Branchez le moteur de votre choix :
 | **Mistral (Voxtral)**| par segment        | ✓             |     oui     |     —      |
 | **OpenAI Whisper**   | par segment        | ✓             |     oui     |     —      |
 | **Groq Whisper**     | par segment        | ✓             |     oui     |     —      |
+| **MiniMax ASR**      | par segment        | ✓             |     oui     |     —      |
 | **OpenAI-compatible**| par segment        | ✓             | selon hôte  |  possible  |
 | **Whisper local** (ggml) | par segment    |       —       |     non     |     ✓      |
 

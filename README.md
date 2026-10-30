@@ -65,6 +65,7 @@ cursor**. Plug in the engine of your choice: **Gemini**, **Mistral**, **OpenAI**
 | **Mistral (Voxtral)**| per segment          | ✓             |     yes      |    —    |
 | **OpenAI Whisper**   | per segment          | ✓             |     yes      |    —    |
 | **Groq Whisper**     | per segment          | ✓             |     yes      |    —    |
+| **MiniMax ASR**      | per segment          | ✓             |     yes      |    —    |
 | **OpenAI-compatible**| per segment          | ✓             | host-dependent | possible |
 | **Local Whisper** (ggml) | per segment      |       —       |      no      |    ✓    |
 
@@ -89,6 +90,10 @@ This branch = upstream release tag + local changes:
   Chinese: it reads the whole passage first, fixes misrecognised words from
   context (homophones, technical terms), rejoins sentences that a pause split
   with a stray period, and never translates.
+- **MiniMax ASR transcription** — "MiniMax ASR" in the provider list: each VAD
+  segment is POSTed to `https://api.minimax.io/v1/speech_to_text` (`asr-1.0`;
+  key in the API key field or `MINIMAX_API_KEY`; the language setting is sent
+  as MiniMax's `language` header, empty = mixed-language recognition).
 - **Fewer pause splits** — the VAD keeps a segment open through pauses up to
   700 ms (was 240 ms), and Chinese/Japanese segments are joined without spaces.
 
